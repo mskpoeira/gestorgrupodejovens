@@ -21,7 +21,7 @@ jobs:
       - name: Validar build Web
         run: npm run build
 
-  desktop-check:
+  desktop-build:
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -34,6 +34,5 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: Instalar dependências
         run: npm install
-      - name: Verificar Rust/Tauri
-        working-directory: apps/desktop/src-tauri
-        run: cargo check
+      - name: Gerar aplicação Windows
+        run: npm run desktop:build
