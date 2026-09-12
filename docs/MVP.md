@@ -1,29 +1,46 @@
-# MVP 0.1 — SGJ
+# SGJ — Estado funcional do projeto
 
-## Entregue nesta base
+## Versão 0.2
 
-- Aplicação Web responsiva em Vue 3 + TypeScript.
-- PWA com manifesto e service worker para cache básico.
-- Dashboard com métricas, radar de relacionamento e próximos eventos.
-- Cadastro e listagem de jovens com persistência local.
-- Identificação de menores de idade.
-- Cadastro e listagem de eventos.
-- Check-in/presença diária com persistência local.
-- Estrutura visual para grupos/equipes, acompanhamento, relatórios e administração.
-- Wrapper Tauri 2 para geração de aplicativo Windows MSI/NSIS.
+A aplicação já possui uma base única para Web/PWA e Windows.
 
-## Próximas entregas
+### Funcionalidades implementadas
 
-1. Backend Laravel e autenticação.
-2. PostgreSQL/MySQL e migrations multi-organização.
-3. RBAC: Administrador Master, coordenação, liderança, comunicação, financeiro e consulta.
-4. API de sincronização offline idempotente.
-5. Responsáveis, autorizações e consentimento de imagem.
-6. Radar automático por regras configuráveis.
-7. Eventos com inscrição, lista de espera e QR Code.
-8. Relatórios e exportações.
-9. Comunicação e notificações.
-10. Auditoria, LGPD e 2FA.
+- Dashboard gerencial com métricas e radar de relacionamento.
+- Cadastro e pesquisa de jovens, visitantes e lideranças.
+- Cadastro de menores com responsável legal e telefone do responsável.
+- Status individual: Ativo, Atenção e Acompanhamento.
+- Eventos e controle simples de quantidade de inscritos.
+- Check-in/presença diária offline.
+- Grupos, equipes e ministérios com liderança e contagem de integrantes.
+- Acompanhamentos com responsável, prazo e conclusão.
+- Radar recalculável por dias sem presença, com limites configuráveis.
+- Relatórios de presença, integração, menores, follow-up, equipes e aniversários.
+- Usuários e perfis modelados para futura autorização pelo backend.
+- Configuração do nome do grupo e cidade.
+- Backup e restauração JSON da base local.
+- PWA responsiva com cache offline básico.
+- Desktop Windows via Tauri 2.
+- CI para validar Web e Rust/Tauri.
+- Workflow que gera instaladores `.msi` e `.exe` no GitHub Actions após atualização da `main`.
+
+## Persistência atual
+
+A versão 0.2 é offline-first e usa armazenamento local no dispositivo. Isso permite testar e operar a interface mesmo sem servidor.
+
+**Importante:** ainda não existe sincronização central entre computadores. Até o backend entrar em produção, cada dispositivo mantém a sua própria base, e o recurso de backup deve ser utilizado.
+
+## Próxima camada
+
+1. Backend Laravel/API.
+2. Banco PostgreSQL/MySQL multi-organização.
+3. Autenticação, recuperação de senha e 2FA.
+4. RBAC efetivo por módulo e ação.
+5. Sincronização idempotente entre PC e Web.
+6. Autorizações e consentimentos de responsáveis.
+7. Inscrição nominal em eventos, lista de espera e QR Code.
+8. Comunicação, notificações e integrações.
+9. Auditoria e trilha LGPD.
 
 ## Execução Web
 
@@ -32,12 +49,23 @@ npm install
 npm run dev
 ```
 
-Build:
+## Build Web
 
 ```bash
 npm run build
 ```
 
-## Desktop
+## Desktop Windows
 
-O código Tauri está em `apps/desktop/src-tauri`. Para empacotar no Windows será necessário Node.js, Rust e Tauri CLI 2. O frontend utilizado pelo Desktop é o mesmo de `apps/web`.
+```bash
+npm install
+npm run desktop:dev
+```
+
+Gerar instaladores:
+
+```bash
+npm run desktop:build
+```
+
+Os pacotes são produzidos pelo Tauri em `apps/desktop/src-tauri/target/release/bundle/`.

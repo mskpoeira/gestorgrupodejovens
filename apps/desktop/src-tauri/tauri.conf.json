@@ -1,11 +1,11 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "SGJ - Gestor de Grupo de Jovens",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "identifier": "br.com.sgj.gestor",
   "build": {
-    "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm --prefix ../.. run dev",
+    "beforeBuildCommand": "npm --prefix ../.. run build",
     "devUrl": "http://localhost:5173",
     "frontendDist": "../../web/dist"
   },
@@ -23,7 +23,8 @@
   "bundle": {
     "active": true,
     "targets": ["msi", "nsis"],
+    "icon": ["icons/icon.ico"],
     "shortDescription": "Sistema de Gestão de Grupo de Jovens",
-    "longDescription": "Aplicativo desktop do SGJ com suporte a operação local e futura sincronização com a plataforma Web."
+    "longDescription": "Aplicativo desktop do SGJ, com operação local/offline e base preparada para sincronização com a plataforma Web."
   }
 }
