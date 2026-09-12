@@ -1,0 +1,29 @@
+name: ZIP Código Fonte SGJ
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  source-zip:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Montar pasta sem sufixo -main
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path package/gestorgrupodejovens | Out-Null
+          Get-ChildItem -Force | Where-Object { $_.Name -notin @('.git', 'package') } | ForEach-Object {
+            Copy-Item $_.FullName -Destination package/gestorgrupodejovens -Recurse -Force
+          }
+
+      - name: Publicar ZIP do código-fonte
+        uses: actions/upload-artifact@v4
+        with:
+          name: gestorgrupodejovens
+          path: package/
+          include-hidden-files: true
+          if-no-files-found: error
