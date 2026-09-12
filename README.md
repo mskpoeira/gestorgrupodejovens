@@ -1,6 +1,12 @@
 # SGJ — Sistema de Gestão de Grupo de Jovens
 
-Sistema web/PWA para gestão completa de grupos de jovens, ministérios e equipes, com foco em pessoas, relacionamento, presença, eventos, escalas, responsáveis, comunicação, documentos, segurança e LGPD.
+Sistema **Web/PWA e Desktop para PC/Windows** para gestão completa de grupos de jovens, ministérios e equipes, com foco em pessoas, relacionamento, presença, eventos, escalas, responsáveis, comunicação, documentos, segurança e LGPD.
+
+## Plataformas
+
+- 🌐 **Web/PWA:** acesso por navegador em computador, celular e tablet, com possibilidade de instalação como aplicativo.
+- 🖥️ **Desktop PC/Windows:** aplicativo instalável, compartilhando a mesma conta e base central da versão Web.
+- 🔄 **Sincronização:** alterações realizadas offline nas funções autorizadas serão sincronizadas automaticamente quando a conexão retornar.
 
 ## Visão do produto
 
@@ -29,14 +35,17 @@ O SGJ nasce com uma abordagem **Youth First**: a pessoa vem antes da burocracia.
 
 ## Princípios
 
-1. Mobile first e responsivo.
-2. PWA instalável.
-3. Operação offline para funções críticas, especialmente presença/check-in.
-4. Permissões granulares por módulo e ação.
-5. Segurança e privacidade desde o banco de dados.
-6. Registro de auditoria das ações administrativas.
-7. Arquitetura modular para grupos pequenos ou grandes.
-8. Preparado para múltiplos grupos/organizações no futuro.
+1. Web e Desktop como plataformas oficiais.
+2. Mobile first e responsivo na versão Web.
+3. PWA instalável.
+4. Aplicativo Desktop nativo para Windows.
+5. Operação offline para funções críticas, especialmente presença/check-in.
+6. Sincronização segura e idempotente entre dispositivo e servidor.
+7. Permissões granulares por módulo e ação.
+8. Segurança e privacidade desde o banco de dados.
+9. Registro de auditoria das ações administrativas.
+10. Arquitetura modular para grupos pequenos ou grandes.
+11. Preparado para múltiplos grupos/organizações no futuro.
 
 ## Documentação
 
