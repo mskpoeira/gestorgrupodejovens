@@ -1,0 +1,9 @@
+{
+  "name": "SGJ — Sistema de Gestão de Grupo de Jovens",
+  "short_name": "SGJ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#172554",
+  "lang": "pt-BR"
+}
