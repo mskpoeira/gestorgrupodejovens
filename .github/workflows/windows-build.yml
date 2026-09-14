@@ -3,7 +3,10 @@ name: Build Windows SGJ
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, fix/auditoria-v0.3]
+
+permissions:
+  contents: read
 
 jobs:
   windows-installer:
@@ -11,21 +14,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Node.js
+
+      - name: Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Rust
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Rust stable
         uses: dtolnay/rust-toolchain@stable
-      - name: Instalar dependências
-        run: npm install
+
+      - name: Instalar dependencias travadas
+        run: npm ci
+
+      - name: Testes Web
+        run: npm test
+
       - name: Gerar instaladores Windows
         run: npm run desktop:build
+
       - name: Publicar instaladores como artefato
         uses: actions/upload-artifact@v4
         with:
           name: SGJ-Windows
           if-no-files-found: error
+          retention-days: 14
           path: |
             apps/desktop/src-tauri/target/release/bundle/msi/*.msi
             apps/desktop/src-tauri/target/release/bundle/nsis/*.exe
