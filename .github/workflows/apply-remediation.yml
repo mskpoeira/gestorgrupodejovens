@@ -103,11 +103,15 @@ jobs:
         working-directory: apps/desktop/src-tauri
         run: cargo test --locked
 
-      - name: Consolidar remediacao validada
+      - name: Consolidar somente codigo e configuracoes validados
         shell: bash
         run: |
+          # GitHub Actions não pode publicar alterações em workflows usando o token padrão.
+          # Mantemos os workflows no estado atual; eles serão atualizados separadamente
+          # pela integração GitHub autenticada após esta consolidação.
+          git restore --source=HEAD -- .github/workflows
+          git clean -fd .github/workflows
           rm -rf .github/remediation
-          rm -f .github/workflows/apply-remediation.yml
           rm -f docs/_cargo_check.log docs/_temp_branch_marker.md docs/_branch_v0.3.txt docs/_branch_v0.3.ready docs/_branch_v0.3.final docs/_branch_v0.3.marker
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
