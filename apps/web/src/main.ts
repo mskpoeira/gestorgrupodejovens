@@ -5,5 +5,8 @@ import './style.css'
 createApp(App).mount('#app')
 
 if ('serviceWorker' in navigator && ['http:', 'https:'].includes(window.location.protocol)) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => undefined))
+  window.addEventListener('load', () => {
+    const serviceWorkerUrl = `${import.meta.env.BASE_URL}sw.js`
+    navigator.serviceWorker.register(serviceWorkerUrl).catch(() => undefined)
+  })
 }
