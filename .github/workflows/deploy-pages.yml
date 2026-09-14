@@ -1,8 +1,6 @@
-name: Deploy Web SGJ
+name: Deploy Web SGJ (GitHub Pages opcional)
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -43,10 +41,8 @@ jobs:
       - name: Build Web para GitHub Pages
         run: npm --workspace apps/web run build -- --base=/gestorgrupodejovens/
 
-      - name: Configurar e habilitar GitHub Pages
+      - name: Configurar GitHub Pages
         uses: actions/configure-pages@v6
-        with:
-          enablement: true
 
       - name: Publicar artefato do Pages
         uses: actions/upload-pages-artifact@v5
