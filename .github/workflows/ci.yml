@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  web-build:
+  web-quality:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,6 +18,8 @@ jobs:
           node-version: 22
       - name: Instalar dependências
         run: npm install
+      - name: Testes automatizados
+        run: npm test
       - name: Validar build Web
         run: npm run build
 
