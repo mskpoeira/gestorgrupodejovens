@@ -1,64 +1,80 @@
 # SGJ — Estado funcional do projeto
 
-## Versão 0.2
+## Versão 0.3.0 — hardening de segurança
 
-A aplicação já possui uma base única para Web/PWA e Windows.
+A aplicação usa uma base Vue 3 compartilhada entre Web/PWA e Windows (Tauri 2), com foco offline-first.
 
 ### Funcionalidades implementadas
 
 - Dashboard gerencial com métricas e radar de relacionamento.
 - Cadastro e pesquisa de jovens, visitantes e lideranças.
-- Cadastro de menores com responsável legal e telefone do responsável.
+- Menoridade calculada pela data de nascimento; responsável e telefone são obrigatórios para menores.
 - Status individual: Ativo, Atenção e Acompanhamento.
 - Eventos e controle simples de quantidade de inscritos.
-- Check-in/presença diária offline.
-- Grupos, equipes e ministérios com liderança e contagem de integrantes.
+- Check-in/presença diária offline com data local correta.
+- Grupos, equipes e ministérios com liderança, contagem de integrantes e desativação persistente.
 - Acompanhamentos com responsável, prazo e conclusão.
-- Radar recalculável por dias sem presença, com limites configuráveis.
-- Relatórios de presença, integração, menores, follow-up, equipes e aniversários.
-- Usuários e perfis modelados para futura autorização pelo backend.
-- Configuração do nome do grupo e cidade.
-- Backup e restauração JSON da base local.
-- PWA responsiva com cache offline básico.
-- Desktop Windows via Tauri 2.
-- CI para validar Web e Rust/Tauri.
-- Workflow que gera instaladores `.msi` e `.exe` no GitHub Actions após atualização da `main`.
+- Radar por dias sem presença, inclusive para pessoas sem histórico de comparecimento.
+- Relatórios de presença com denominador histórico por data de cadastro.
+- Autenticação local com senha derivada por PBKDF2 e perfis RBAC efetivos no cliente.
+- Trilha local de auditoria de ações sensíveis.
+- Persistência criptografada: IndexedDB na Web e SQLite no Desktop.
+- Migração automática dos dados legados do `localStorage` para o armazenamento seguro.
+- Backup local criptografado por senha em formato `.sgjbackup`, com validação estrutural na importação.
+- PWA com manifesto completo, ícones e cache restrito a arquivos estáticos.
+- Desktop Windows via Tauri 2 com CSP restritiva e plugin SQL oficial.
+- CI com testes, auditoria npm e builds Web/Windows.
 
-## Persistência atual
+## Persistência e sincronização
 
-A versão 0.2 é offline-first e usa armazenamento local no dispositivo. Isso permite testar e operar a interface mesmo sem servidor.
+A versão 0.3.0 é **local-first**. Cada dispositivo mantém sua própria base criptografada.
 
-**Importante:** ainda não existe sincronização central entre computadores. Até o backend entrar em produção, cada dispositivo mantém a sua própria base, e o recurso de backup deve ser utilizado.
+- Web/PWA: IndexedDB.
+- Windows/Tauri: SQLite.
+- Backup: arquivo criptografado por senha.
+
+**Ainda não existe servidor central nem sincronização automática Web ↔ PC.** Essa capacidade depende da implantação do backend central e permanece no roadmap. Portanto, a existência de login local não deve ser interpretada como conta em nuvem.
+
+## Segurança operacional
+
+- Não há senha padrão. No primeiro uso é criado o Administrador Master.
+- Perfis limitam telas e ações no modo local.
+- O service worker não armazena respostas de `/api/`.
+- O Desktop usa Content Security Policy restritiva.
+- Dados persistidos localmente são armazenados cifrados.
+- O backup exige senha e não contém JSON em texto claro.
+
+Para uma implantação com múltiplos dispositivos, acesso remoto e governança central, ainda são necessários backend, autenticação central, sincronização idempotente, política de retenção e controles administrativos de servidor.
 
 ## Próxima camada
 
-1. Backend Laravel/API.
+1. Backend central autenticado.
 2. Banco PostgreSQL/MySQL multi-organização.
-3. Autenticação, recuperação de senha e 2FA.
-4. RBAC efetivo por módulo e ação.
-5. Sincronização idempotente entre PC e Web.
-6. Autorizações e consentimentos de responsáveis.
-7. Inscrição nominal em eventos, lista de espera e QR Code.
-8. Comunicação, notificações e integrações.
-9. Auditoria e trilha LGPD.
+3. Recuperação de conta, 2FA e gestão/revogação de dispositivos.
+4. Sincronização idempotente entre Desktop, PWA e servidor.
+5. Autorizações e consentimentos digitais de responsáveis.
+6. Inscrição nominal em eventos, lista de espera e QR Code.
+7. Comunicação e notificações.
+8. Política central de retenção, anonimização/exportação e auditoria LGPD.
 
 ## Execução Web
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-## Build Web
+## Testes e build Web
 
 ```bash
+npm test
 npm run build
 ```
 
 ## Desktop Windows
 
 ```bash
-npm install
+npm ci
 npm run desktop:dev
 ```
 
