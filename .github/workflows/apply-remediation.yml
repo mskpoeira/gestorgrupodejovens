@@ -27,6 +27,7 @@ jobs:
           tar -xzf /tmp/sgj-v03-remediation.tar.gz -C .
           rm -rf .github/remediation
           rm -f docs/_temp_branch_marker.md docs/_branch_v0.3.txt docs/_branch_v0.3.ready docs/_branch_v0.3.final docs/_branch_v0.3.marker
+          cp apps/web/public/icons/icon-512.png apps/desktop/src-tauri/icons/icon.png
 
       - name: Node.js 22
         uses: actions/setup-node@v4
