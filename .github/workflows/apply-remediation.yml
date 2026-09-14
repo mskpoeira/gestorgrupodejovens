@@ -106,11 +106,12 @@ jobs:
           rm -f docs/_cargo_check.log
           rm -f docs/_temp_branch_marker.md docs/_branch_v0.3.txt docs/_branch_v0.3.ready docs/_branch_v0.3.final docs/_branch_v0.3.marker
 
-      - name: Consolidar remediacao validada
+      - name: Consolidar codigo validado
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
+          git reset -- .github/workflows
           git commit -m 'fix: remediar auditoria e estabilizar SGJ v0.3.0'
           git push origin HEAD:fix/auditoria-final-20260914
