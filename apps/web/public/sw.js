@@ -1,5 +1,5 @@
 const CACHE = 'sgj-v3-static'
-const PRECACHE = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png']
+const PRECACHE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png']
 const STATIC_DESTINATIONS = new Set(['script', 'style', 'image', 'font'])
 
 self.addEventListener('install', event => {
@@ -18,10 +18,12 @@ self.addEventListener('fetch', event => {
   const request = event.request
   if (request.method !== 'GET') return
   const url = new URL(request.url)
-  if (url.origin !== self.location.origin || url.pathname.startsWith('/api/')) return
+  const scope = new URL(self.registration.scope)
+  if (url.origin !== scope.origin || !url.pathname.startsWith(scope.pathname)) return
+  if (url.pathname.startsWith(`${scope.pathname}api/`)) return
 
   if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).catch(() => caches.match('/index.html')))
+    event.respondWith(fetch(request).catch(() => caches.match('./index.html')))
     return
   }
 
