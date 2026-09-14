@@ -1,51 +1,45 @@
 # SGJ — Sistema de Gestão de Grupo de Jovens
 
-Sistema **Web/PWA e Desktop para PC/Windows** para gestão completa de grupos de jovens, ministérios e equipes, com foco em pessoas, relacionamento, presença, eventos, escalas, responsáveis, comunicação, documentos, segurança e LGPD.
+Sistema **Web/PWA e Desktop para PC/Windows** para gestão de grupos de jovens, ministérios e equipes, com foco em cadastro, presença, eventos, equipes, responsáveis e acompanhamento.
+
+## Estado atual — v0.3.0
+
+### Implementado
+- 🌐 Web/PWA responsiva e instalável.
+- 🖥️ Desktop Windows empacotado com Tauri 2.
+- 🔐 Cofre local criptografado com AES-GCM e chave derivada por PBKDF2.
+- 💾 Operação local/offline para cadastros, eventos, presença, grupos e acompanhamentos.
+- 🔒 Backup local criptografado por senha.
+- 🧭 Radar de acompanhamento configurável.
+- 👶 Identificação automática de menoridade pela data de nascimento e exigência de responsável no cadastro de menores.
+- ✅ Testes automatizados para regras centrais e CI para Web/Windows.
+- 📦 PWA com service worker restrito a recursos estáticos e ícones de instalação.
+
+### Em evolução — não considerar implementado ainda
+- Conta central e autenticação multiusuário.
+- RBAC efetivo por usuário/perfil.
+- Backend e banco de dados central.
+- Sincronização Web ↔ PC e resolução de conflitos offline.
+- Auditoria central de ações.
+- SQLite nativo no Desktop.
+
+> Até a implantação da camada central, cada dispositivo mantém seu próprio cofre local. A senha local protege os dados daquele dispositivo, mas não substitui autenticação central entre usuários.
 
 ## Plataformas
 
-- 🌐 **Web/PWA:** acesso por navegador em computador, celular e tablet, com possibilidade de instalação como aplicativo.
-- 🖥️ **Desktop PC/Windows:** aplicativo instalável, compartilhando a mesma conta e base central da versão Web.
-- 🔄 **Sincronização:** alterações realizadas offline nas funções autorizadas serão sincronizadas automaticamente quando a conexão retornar.
+- **Web/PWA:** navegador em computador, celular e tablet, com instalação como aplicativo quando suportada.
+- **Desktop PC/Windows:** aplicativo instalável gerado pelo pipeline do GitHub Actions.
 
-## Visão do produto
-
-O SGJ nasce com uma abordagem **Youth First**: a pessoa vem antes da burocracia. O sistema deve permitir saber rapidamente quem chegou, quem está ativo, quem se afastou, quem precisa de acompanhamento, quem está escalado, quem confirmou presença e quais pendências precisam de atenção.
-
-## Módulos previstos
-
-- Dashboard gerencial
-- Pessoas, visitantes e responsáveis
-- Menores e autorizações
-- Presença e check-in/check-out
-- Radar de relacionamento e acompanhamento
-- Grupos, equipes e ministérios
-- Eventos, inscrições e lista de espera
-- Retiros, viagens e alojamentos
-- Escalas e voluntariado
-- Comunicação e notificações
-- Formação e trilhas
-- Pedidos de oração/intenção com acesso restrito
-- Documentos e consentimentos
-- Financeiro de atividades
-- Patrimônio e materiais
-- Galeria e mídia
-- Relatórios e indicadores
-- Administração, perfis, permissões e auditoria
-
-## Princípios
+## Princípios arquiteturais
 
 1. Web e Desktop como plataformas oficiais.
 2. Mobile first e responsivo na versão Web.
-3. PWA instalável.
-4. Aplicativo Desktop nativo para Windows.
-5. Operação offline para funções críticas, especialmente presença/check-in.
-6. Sincronização segura e idempotente entre dispositivo e servidor.
-7. Permissões granulares por módulo e ação.
-8. Segurança e privacidade desde o banco de dados.
-9. Registro de auditoria das ações administrativas.
-10. Arquitetura modular para grupos pequenos ou grandes.
-11. Preparado para múltiplos grupos/organizações no futuro.
+3. PWA instalável e offline para funções críticas.
+4. Dados locais protegidos por criptografia.
+5. Sincronização futura segura e idempotente entre dispositivo e servidor.
+6. Permissões granulares por módulo e ação quando o backend central for habilitado.
+7. Segurança, privacidade e minimização de dados desde a arquitetura.
+8. Registro de auditoria para ações administrativas na camada central.
 
 ## Documentação
 
@@ -54,10 +48,16 @@ O SGJ nasce com uma abordagem **Youth First**: a pessoa vem antes da burocracia.
 - [Modelo inicial de dados](docs/BANCO_DADOS.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Pesquisa de sistemas semelhantes](docs/PESQUISA_CONCORRENTES.md)
+- [Auditoria técnica de 13/09/2026](docs/AUDITORIA_2026-09-13.md)
 
-## Status
+## Desenvolvimento
 
-🚧 Projeto em estruturação inicial.
+```bash
+npm install
+npm test
+npm run build
+npm run desktop:build
+```
 
 ## Repositório oficial
 
