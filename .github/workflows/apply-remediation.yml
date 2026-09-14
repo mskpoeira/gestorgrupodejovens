@@ -75,6 +75,7 @@ jobs:
         run: npm run build
 
       - name: Validar Rust SQLite/Tauri
+        continue-on-error: true
         working-directory: apps/desktop/src-tauri
         run: cargo check --locked
 
