@@ -2,37 +2,61 @@ name: CI SGJ
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, fix/auditoria-v0.3]
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
-  web-build:
+  quality-gate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Node.js
+
+      - name: Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Instalar dependências
-        run: npm install
-      - name: Validar build Web
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Dependencias Linux do Tauri
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libxdo-dev \
+            libssl-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      - name: Instalar dependencias travadas
+        run: npm ci
+
+      - name: Testes Web
+        run: npm test
+
+      - name: Auditoria npm
+        run: npm audit --audit-level=moderate
+
+      - name: Build Web e typecheck
         run: npm run build
 
-  desktop-build:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Rust
-        uses: dtolnay/rust-toolchain@stable
-      - name: Instalar dependências
-        run: npm install
-      - name: Gerar aplicação Windows
-        run: npm run desktop:build
+      - name: Cargo check
+        working-directory: apps/desktop/src-tauri
+        run: cargo check --locked
+
+      - name: Cargo test
+        working-directory: apps/desktop/src-tauri
+        run: cargo test --locked
