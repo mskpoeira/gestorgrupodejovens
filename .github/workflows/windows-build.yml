@@ -3,7 +3,7 @@ name: Build Windows SGJ
 on:
   workflow_dispatch:
   push:
-    branches: [main, fix/auditoria-v0.3]
+    branches: [main]
 
 permissions:
   contents: read
