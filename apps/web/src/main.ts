@@ -6,7 +6,7 @@ createApp(App).mount('#app')
 
 if ('serviceWorker' in navigator && ['http:', 'https:'].includes(window.location.protocol)) {
   window.addEventListener('load', () => {
-    const serviceWorkerUrl = `${import.meta.env.BASE_URL}sw.js`
+    const serviceWorkerUrl = new URL('sw.js', document.baseURI).toString()
     navigator.serviceWorker.register(serviceWorkerUrl).catch(() => undefined)
   })
 }
