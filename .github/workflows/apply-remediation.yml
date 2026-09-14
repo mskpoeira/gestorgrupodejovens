@@ -36,6 +36,24 @@ jobs:
       - name: Rust stable
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Dependencias Linux oficiais do Tauri
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libxdo-dev \
+            libssl-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      - name: Atualizar Vitest para versao corrigida
+        run: npm pkg set devDependencies.vitest="^5.0.0" --workspace apps/web
+
       - name: Gerar lockfile npm
         run: npm install --package-lock-only --ignore-scripts
 
@@ -50,7 +68,7 @@ jobs:
         run: npm test
 
       - name: Auditoria de dependencias npm
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=moderate
 
       - name: Build Web e typecheck
         run: npm run build
