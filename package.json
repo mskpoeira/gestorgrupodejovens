@@ -1,11 +1,12 @@
 {
   "name": "sgj-gestor-grupo-jovens",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "workspaces": ["apps/web", "apps/desktop"],
   "scripts": {
     "dev": "npm --workspace apps/web run dev",
     "build": "npm --workspace apps/web run build",
+    "test": "npm --workspace apps/web run test",
     "preview": "npm --workspace apps/web run preview",
     "desktop:dev": "npm --workspace apps/desktop run dev",
     "desktop:build": "npm --workspace apps/desktop run build"

@@ -1,0 +1,1 @@
+{"main-capability":{"identifier":"main-capability","description":"Permissões mínimas da janela principal do SGJ","local":true,"windows":["main"],"permissions":["core:default","sql:default","sql:allow-execute"]}}
