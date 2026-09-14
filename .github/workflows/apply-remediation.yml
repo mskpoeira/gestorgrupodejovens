@@ -1,8 +1,8 @@
-name: Diagnosticar remediacao SGJ v0.3
+name: Validar e consolidar remediacao SGJ
 
 on:
   push:
-    branches: [fix/auditoria-v0.3]
+    branches: [fix/auditoria-final-20260914]
     paths:
       - '.github/workflows/apply-remediation.yml'
   workflow_dispatch:
@@ -11,16 +11,16 @@ permissions:
   contents: write
 
 jobs:
-  diagnose-rust:
+  validate-and-consolidate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout da branch
         uses: actions/checkout@v4
         with:
-          ref: fix/auditoria-v0.3
+          ref: fix/auditoria-final-20260914
           fetch-depth: 0
 
-      - name: Recompor pacote de remediacao
+      - name: Recompor remediacao e corrigir icone Tauri
         shell: bash
         run: |
           cat .github/remediation/*.txt | base64 -d > /tmp/sgj-v03-remediation.tar.gz
@@ -50,6 +50,11 @@ jobs:
           target.write_bytes(png)
           PY
 
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Rust stable
         uses: dtolnay/rust-toolchain@stable
 
@@ -68,27 +73,44 @@ jobs:
             libayatana-appindicator3-dev \
             librsvg2-dev
 
-      - name: Gerar Cargo.lock
-        working-directory: apps/desktop/src-tauri
-        run: cargo generate-lockfile
+      - name: Atualizar Vitest para versao corrigida
+        run: npm pkg set devDependencies.vitest="^5.0.0" --workspace apps/web
 
-      - name: Capturar cargo check
+      - name: Gerar lockfiles reproduziveis
         shell: bash
         run: |
-          set +e
+          npm install --package-lock-only --ignore-scripts
           cd apps/desktop/src-tauri
-          cargo check --locked > /tmp/cargo-check.log 2>&1
-          CODE=$?
-          cd ../../..
-          cp /tmp/cargo-check.log docs/_cargo_check.log
-          printf '\nEXIT_CODE=%s\n' "$CODE" >> docs/_cargo_check.log
-          exit 0
+          cargo generate-lockfile
 
-      - name: Publicar log de diagnostico
+      - name: Instalar dependencias reproduziveis
+        run: npm ci
+
+      - name: Testes automatizados
+        run: npm test
+
+      - name: Auditoria de dependencias npm
+        run: npm audit --audit-level=moderate
+
+      - name: Build Web e typecheck
+        run: npm run build
+
+      - name: Validar Rust SQLite/Tauri
+        working-directory: apps/desktop/src-tauri
+        run: cargo check --locked
+
+      - name: Limpar artefatos temporarios
+        shell: bash
+        run: |
+          rm -rf .github/remediation
+          rm -f docs/_cargo_check.log
+          rm -f docs/_temp_branch_marker.md docs/_branch_v0.3.txt docs/_branch_v0.3.ready docs/_branch_v0.3.final docs/_branch_v0.3.marker
+
+      - name: Consolidar remediacao validada
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/_cargo_check.log
-          git commit -m 'chore: registrar diagnostico cargo check'
-          git push origin HEAD:fix/auditoria-v0.3
+          git add -A
+          git commit -m 'fix: remediar auditoria e estabilizar SGJ v0.3.0'
+          git push origin HEAD:fix/auditoria-final-20260914
